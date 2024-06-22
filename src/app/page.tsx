@@ -44,6 +44,7 @@ export default function Home() {
         if (file) {
             try {
                 const signedUrlData = await getSignedUrl();
+                console.log( signedUrlData['url']);
                 await uploadFile(file, signedUrlData['url'], signedUrlData['fields']);
                 setIsUploaded(true); // Set isUploaded to true when the upload button is clicked
             } catch (error) {
@@ -52,11 +53,6 @@ export default function Home() {
         } else {
             console.error("No file selected.");
         }
-    };
-
-
-    const applyBlur = (blur: number) => {
-        console.log("Blur applied!");
     };
 
     return (

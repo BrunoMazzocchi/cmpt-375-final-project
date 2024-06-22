@@ -12,6 +12,11 @@ export const POST = async (request: NextRequest) => {
             return NextResponse.error();
         }
 
+        if ((file as File).type !== "image/jpeg") {
+            console.error("Only JPEG images are allowed.");
+            return NextResponse.error();
+        }
+
         const fileEntry = file as File;
 
         const formData = new FormData();

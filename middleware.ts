@@ -19,7 +19,11 @@ const corsOptions: {
     credentials: process.env?.CREDENTIALS == "true",
 };
 
+// Middleware
+// ========================================================
+// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
+    // Response
     const response = NextResponse.next();
 
     // Allowed origins check
