@@ -2,7 +2,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, add the .env.local file to the root of the project with the following content:
+
+```API_GATEWAY = ```
+
+
+
+Second, run the development server:
 
 ```bash
 npm run dev

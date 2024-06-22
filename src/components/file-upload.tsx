@@ -2,7 +2,11 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 
-export default function FileUpload() {
+interface FileUploadProps {
+    onFileChange: (file: File | null) => void;
+}
+
+export default function FileUpload( { onFileChange }: FileUploadProps ) {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -10,7 +14,7 @@ export default function FileUpload() {
     (acceptedFiles: any) => {
       const file = acceptedFiles[0] ?? null;
       setFile(file);
-
+      onFileChange(file);
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
