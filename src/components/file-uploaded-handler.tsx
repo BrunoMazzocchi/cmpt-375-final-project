@@ -2,20 +2,21 @@ import React, {useState} from "react";
 import Image from "next/image";
 
 interface FileUploadedHandlerProps {
-    file: File;
+    file: File,
+    handleBlurChanges?: (value: number) => void
 }
 
-interface OnBlurChangeProps {
-    blurChanges: number;
-}
-
-export default function FileUploadedHandler({file}: FileUploadedHandlerProps, {blurChanges}: OnBlurChangeProps) {
+export default function FileUploadedHandler({file, handleBlurChanges}: FileUploadedHandlerProps) {
 
     const [blur, setBlur] = useState(0);
 
     const handleBlurChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setBlur(parseInt(event.target.value, 10));
-    };
+        const newBlur = parseInt(event.target.value);
+        setBlur(newBlur);
+        if (handleBlurChanges) {
+            handleBlurChanges(newBlur);
+        }
+    }
 
     const url = URL.createObjectURL(file);
 
@@ -36,6 +37,7 @@ export default function FileUploadedHandler({file}: FileUploadedHandlerProps, {b
                 />
             </div>
             <input
+                style={{margin: '10px 0 20px 0'}}
                 type="range"
                 min="0"
                 max="64"

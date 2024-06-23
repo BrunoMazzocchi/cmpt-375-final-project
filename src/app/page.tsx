@@ -45,6 +45,29 @@ export default function Home() {
         setFile(new File([file], imageUrl));
     };
 
+    const uploadImageBlur = async (file: File, blur: number) => {
+        const fileKey = file.name.split("/").pop();
+        console.log(blur.toString());
+        const formData = new FormData();
+        formData.append("key", fileKey as string);
+        formData.append("blur_radius", blur.toString());
+
+        const response = await fetch('/api/blur-image', {
+            method: "PUT",
+            body: formData,
+        });
+
+        if (!response.ok) {
+            console.error("Failed to upload file.");
+            throw new Error("Failed to upload file.");
+        }
+
+        const data = await response.json();
+        const imageUrl = data['url'];
+
+        // Set file to the uploaded image URL
+        setFile(new File([file], imageUrl));
+    }
 
     const handleUpload = async () => {
         if (file) {
@@ -76,10 +99,10 @@ export default function Home() {
                             Image upload successfully! Drag to apply a blur effect
                         </h1>
                             <div className="mb-4">
-                                <FileUploadedHandler file={file}/>
+                                <FileUploadedHandler file={file} handleBlurChanges={setBlurApplied}/>
                             </div>
                             <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl"
-                                    onClick={handleUpload}>
+                                    onClick={() => uploadImageBlur(file, blurApplied)}>
                                 Save and Upload
                             </button>
                         </>

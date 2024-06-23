@@ -1,21 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import {processEnv} from "@next/env";
 
-export const GET = async (request: NextRequest) => {
+export const PUT = async (request: NextRequest) => {
+    const formData: FormData = await request.formData();
     try {
-        const res = await fetch(`${process.env?.SIGNED_URL}`, {
+
+        console.log("FORM DATA: ", formData);
+
+        const res = await fetch(`${process.env?.BLUR_URL}`, {
             headers: {
                 "Content-Type": "image/jpeg",
             },
+            method: 'POST',
+            body: formData,
         });
 
         if (!res.ok) {
-            console.error(`Failed to fetch data: ${res.status} ${res.statusText}`);
+            console.error(`Failed to upload data: ${res.status} ${res.statusText}`);
+            console.log(res);
             return NextResponse.error();
         }
 
         const data = await res.json();
-        console.log("DATA: ", data);
         return NextResponse.json(data);
 
     } catch (error) {
