@@ -2,7 +2,7 @@
 import React from "react";
 import HomeComponent from "@/components/home-component";
 export default function Home() {
-    
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-black p-4 overflow-hidden">
             <div className="relative w-screen max-w-lg flex justify-center items-center">
