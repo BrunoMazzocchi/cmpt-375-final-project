@@ -1,0 +1,21 @@
+@keyframes screenshotAnimation {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    10% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    30% {
+        transform: scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.Toastify__toast {
+    animation: screenshotAnimation 0.3s ease-in-out;
+}

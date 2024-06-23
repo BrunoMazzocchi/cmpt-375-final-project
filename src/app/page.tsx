@@ -1,6 +1,10 @@
 "use client";
 import React from "react";
 import HomeComponent from "@/components/home-component";
+import './screenshot-animation.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 export default function Home() {
 
     return (

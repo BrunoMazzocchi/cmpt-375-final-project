@@ -30,7 +30,7 @@ export const POST = async (request: NextRequest) => {
 
         return NextResponse.json({
             message: true,
-            url: `${process.env?.CLOUDFRONT_URL}/${data['key']}`,
+            url: `https://d11kkclchkiwpe.cloudfront.net/processed/${data['key']}`,
         });
 
     } catch (error) {
