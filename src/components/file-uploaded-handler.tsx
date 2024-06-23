@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Image from "next/image";
 
 interface FileUploadedHandlerProps {
@@ -9,7 +9,7 @@ interface OnBlurChangeProps {
     blurChanges: number;
 }
 
-export default function FileUploadedHandler({ file }: FileUploadedHandlerProps, { blurChanges }: OnBlurChangeProps) {
+export default function FileUploadedHandler({file}: FileUploadedHandlerProps, {blurChanges}: OnBlurChangeProps) {
 
     const [blur, setBlur] = useState(0);
 
@@ -21,16 +21,22 @@ export default function FileUploadedHandler({ file }: FileUploadedHandlerProps, 
 
     return (
         <div>
-            <div style={{ filter: `blur(${blur}px)` }}>
-                <Image src={url} alt="Uploaded file" width={500} height={500} />
-            </div>
+            <Image
+                src={url}
+                alt="Uploaded file"
+                width={500}
+                height={500}
+                style={{filter: `blur(${blur}px)`}}
+            />
             <input
                 type="range"
                 min="0"
-                max="20"
-                value={ blurChanges }
-                onChange={ handleBlurChange }
+                max="64"
+                value={blur}
+                onChange={handleBlurChange}
             />
+
+            <p>Blur: {blur}px</p>
         </div>
     );
 }

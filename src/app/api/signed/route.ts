@@ -3,7 +3,12 @@ import {processEnv} from "@next/env";
 
 export const GET = async (request: NextRequest) => {
     try {
-        const res = await fetch(`${process.env?.SIGNED_URL}`, { });
+        const res = await fetch(`${process.env?.SIGNED_URL}`, {
+            headers: {
+                "Content-Type": "application/json",
+
+            }
+        });
 
         if (!res.ok) {
             console.error(`Failed to fetch data: ${res.status} ${res.statusText}`);
@@ -11,7 +16,7 @@ export const GET = async (request: NextRequest) => {
         }
 
         const data = await res.json();
-        console.log(data);
+        console.log("DATA: ", data);
         return NextResponse.json(data);
 
     } catch (error) {

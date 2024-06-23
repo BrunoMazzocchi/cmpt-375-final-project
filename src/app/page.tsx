@@ -37,6 +37,12 @@ export default function Home() {
             console.error("Failed to upload file.");
             throw new Error("Failed to upload file.");
         }
+
+        const data = await response.json();
+        const imageUrl = data['url'];
+
+        // Set file to the uploaded image URL
+        setFile(new File([file], imageUrl));
     };
 
 

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { v4 as uuidv4 } from 'uuid';
 
 export const POST = async (request: NextRequest) => {
     try {
@@ -13,7 +14,7 @@ export const POST = async (request: NextRequest) => {
         }
 
         if ((file as File).type !== "image/jpeg") {
-            console.error("Only JPEG images are allowed.");
+            console.error("Only JPG images are allowed.");
             return NextResponse.error();
         }
 
@@ -21,7 +22,7 @@ export const POST = async (request: NextRequest) => {
 
         const formData = new FormData();
 
-        formData.append("key", fields.key);
+        formData.append("key", fields['key']);
 
         Object.entries(fields).forEach(([key, value]) => {
             if (key !== "key") {
@@ -43,9 +44,14 @@ export const POST = async (request: NextRequest) => {
             return NextResponse.error();
         }
 
-        console.log(res);
+        console.log(`${process.env?.CLOUDFRONT_URL}/${fields.key}`);
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({
+            message: true,
+            url: `${process.env?.CLOUDFRONT_URL}/${fields.key}`
+        });
+
+
     } catch (error) {
         console.error("An error occurred:", error);
         return NextResponse.error();
