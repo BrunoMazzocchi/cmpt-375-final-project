@@ -33,6 +33,7 @@ export const POST = async (request: NextRequest) => {
         const res = await fetch(urlToPost as string, {
             method: 'POST',
             body: formData,
+            cache: 'no-cache',
         });
 
         if (!res.ok) {

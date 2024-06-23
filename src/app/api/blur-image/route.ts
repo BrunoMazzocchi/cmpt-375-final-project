@@ -1,31 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
-import {processEnv} from "@next/env";
 
-export const PUT = async (request: NextRequest) => {
+export const POST = async (request: NextRequest) => {
     const formData: FormData = await request.formData();
-    try {
+    const payload = {
+        key: formData.get('key'),
+        blur_radius: formData.get('blur_radius'),
+    };
 
-        console.log("FORM DATA: ", formData);
+    try {
+        console.log("FORM DATA: ", payload);
 
         const res = await fetch(`${process.env?.BLUR_URL}`, {
-            headers: {
-                "Content-Type": "image/jpeg",
-            },
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            cache: 'no-cache',
         });
 
         if (!res.ok) {
             console.error(`Failed to upload data: ${res.status} ${res.statusText}`);
-            console.log(res);
-            return NextResponse.error();
+            const errorText = await res.text();
+            console.error(`Response body: ${errorText}`);
+            return new NextResponse(JSON.stringify({ error: errorText }), { status: res.status });
         }
 
         const data = await res.json();
-        return NextResponse.json(data);
+
+        return NextResponse.json({
+            message: true,
+            url: `${process.env?.CLOUDFRONT_URL}/${data['key']}`,
+        });
 
     } catch (error) {
         console.error(`Failed to fetch data: ${error}`);
-        return NextResponse.error();
+        return new NextResponse(JSON.stringify({ error: error }), { status: 500 });
     }
 }

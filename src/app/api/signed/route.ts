@@ -4,9 +4,14 @@ import {processEnv} from "@next/env";
 export const GET = async (request: NextRequest) => {
     try {
         const res = await fetch(`${process.env?.SIGNED_URL}`, {
+            method: 'GET',
+            cache: 'no-cache',
             headers: {
-                "Content-Type": "image/jpeg",
-            },
+                'content-type': 'application/json',
+                'accept': '*/*',
+                'accept-encoding': 'gzip, deflate, br',
+                'connection': 'keep-alive',
+            }
         });
 
         if (!res.ok) {

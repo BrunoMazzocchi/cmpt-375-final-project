@@ -49,12 +49,13 @@ export const useHomeHooks = () => {
         formData.append("blur_radius", blur.toString());
 
         const response = await fetch('/api/blur-image', {
-            method: "PUT",
+            method: "POST",
             body: formData,
         });
 
         if (!response.ok) {
             console.error("Failed to upload file.");
+            console.log(response);
             throw new Error("Failed to upload file.");
         }
 
