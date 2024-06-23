@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { v4 as uuidv4 } from 'uuid';
-
 export const POST = async (request: NextRequest) => {
     try {
         const data: FormData = await request.formData();

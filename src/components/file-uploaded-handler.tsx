@@ -21,13 +21,20 @@ export default function FileUploadedHandler({file}: FileUploadedHandlerProps, {b
 
     return (
         <div>
-            <Image
-                src={url}
-                alt="Uploaded file"
-                width={500}
-                height={500}
-                style={{filter: `blur(${blur}px)`}}
-            />
+            <div style={{
+                overflow: 'hidden',
+                padding: '10px'
+            }}>
+                <Image
+                    style={{
+                        filter: `blur(${blur}px)`,
+                    }}
+                    src={url}
+                    alt="Uploaded file"
+                    width={500}
+                    height={500}
+                />
+            </div>
             <input
                 type="range"
                 min="0"
