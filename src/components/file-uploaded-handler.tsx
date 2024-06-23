@@ -1,5 +1,5 @@
-import React, {useState, useRef} from "react";
 import Image from "next/image";
+import React, { useRef, useState } from "react";
 
 interface FileUploadedHandlerProps {
     file: File,
@@ -10,12 +10,10 @@ interface FileUploadedHandlerProps {
 }
 
 export default function FileUploadedHandler({
-                                                file,
-                                                handleBlurChanges,
-                                                sliderUpload,
-                                                isSliderChanging,
-                                                setSliderChanging
-                                            }: FileUploadedHandlerProps) {
+    file,
+    handleBlurChanges,
+    sliderUpload
+}: FileUploadedHandlerProps) {
 
     const [blur, setBlur] = useState(0);
     const timeoutId = useRef<NodeJS.Timeout | null>(null);
@@ -51,7 +49,7 @@ export default function FileUploadedHandler({
                 />
             </div>
             <input
-                style={{margin: '10px 0 20px 0'}}
+                style={{ margin: '10px 0 20px 0' }}
                 type="range"
                 min="0"
                 max="64"
