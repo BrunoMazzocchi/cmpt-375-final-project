@@ -6,7 +6,7 @@ import { useHomeHooks } from "@/services/hooks/home-hooks";
 export default function HomeComponent() {
     const { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied } = useHomeHooks();
 
-    return isUploaded && file ? (
+    const ImageUploaded = (file: File) => (
         <><h1 className="text-4xl font-bold m-auto pb-8 text-center text-white">
             Image upload successfully! Drag to apply a blur effect
         </h1>
@@ -18,7 +18,9 @@ export default function HomeComponent() {
                 Save and Upload
             </button>
         </>
-    ) : (
+    );
+
+    const ImageToBeUploaded = () => (
         <><h1 className="text-4xl font-bold m-auto pb-8 text-center text-white">
             Upload an image
         </h1>
@@ -31,4 +33,6 @@ export default function HomeComponent() {
             </button>
         </>
     );
+
+    return isUploaded && file ? ImageUploaded(file) : ImageToBeUploaded();
 }
