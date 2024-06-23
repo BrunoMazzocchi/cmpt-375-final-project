@@ -4,10 +4,18 @@ import Image from "next/image";
 interface FileUploadedHandlerProps {
     file: File,
     handleBlurChanges?: (value: number) => void,
-    sliderUpload?: (file: File, blur: number) => Promise<void>
+    sliderUpload?: (file: File, blur: number) => Promise<void>,
+    isSliderChanging?: boolean,
+    setSliderChanging?: (value: (((prevState: boolean) => boolean) | boolean)) => void
 }
 
-export default function FileUploadedHandler({file, handleBlurChanges, sliderUpload}: FileUploadedHandlerProps) {
+export default function FileUploadedHandler({
+                                                file,
+                                                handleBlurChanges,
+                                                sliderUpload,
+                                                isSliderChanging,
+                                                setSliderChanging
+                                            }: FileUploadedHandlerProps) {
 
     const [blur, setBlur] = useState(0);
     const timeoutId = useRef<NodeJS.Timeout | null>(null);
@@ -15,6 +23,7 @@ export default function FileUploadedHandler({file, handleBlurChanges, sliderUplo
     const handleBlurChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newBlur = parseInt(event.target.value);
         setBlur(newBlur);
+
         if (handleBlurChanges) {
             handleBlurChanges(newBlur);
             if (timeoutId.current) {

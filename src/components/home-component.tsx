@@ -4,7 +4,7 @@ import FileUpload from "@/components/file-upload";
 import { useHomeHooks } from "@/services/hooks/home-hooks";
 
 export default function HomeComponent() {
-    const { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied, downloadFile } = useHomeHooks();
+    const { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied, downloadFile, isUploadingAnImage} = useHomeHooks();
 
     const ImageUploaded = (file: File) => (
         <><h1 className="text-4xl font-bold m-auto pb-8 text-center text-white">
@@ -34,5 +34,5 @@ export default function HomeComponent() {
         </>
     );
 
-    return isUploaded && file ? ImageUploaded(file) : ImageToBeUploaded();
+    return isUploaded && file ? ImageUploaded(file) : isUploadingAnImage ? <h1 className="text-4xl font-bold m-auto pb-8 text-center text-white">Uploading...</h1> : ImageToBeUploaded();
 }

@@ -4,6 +4,8 @@ export const useHomeHooks = () => {
     const [file, setFile] = useState<File | null>(null);
     const [isUploaded, setIsUploaded] = useState(false);
     const [blurApplied, setBlurApplied] = useState(0);
+    const [isUploadingAnImage, setIsUploadingAnImage] = useState(false);
+    const [isSliderChanging, setIsSliderChanging] = useState(false);
 
 
     const downloadFile = async (file: File) => {
@@ -91,11 +93,12 @@ export const useHomeHooks = () => {
     const handleUpload = async () => {
         if (file) {
             try {
+                setIsUploadingAnImage(true);
                 const signedUrlData = await getSignedUrl();
-                console.log( signedUrlData['url']);
                 const newFile = await uploadFile(file, signedUrlData['url'], signedUrlData['fields']);
                 setFile(newFile);
                 setIsUploaded(true);
+                setIsUploadingAnImage(false);
             } catch (error) {
                 console.error(error);
             }
@@ -104,5 +107,5 @@ export const useHomeHooks = () => {
         }
     };
 
-    return { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied, downloadFile};
+    return { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied, downloadFile, isUploadingAnImage, setIsUploadingAnImage, isSliderChanging, setIsSliderChanging};
 };
