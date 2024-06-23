@@ -1,20 +1,28 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import Image from "next/image";
 
 interface FileUploadedHandlerProps {
     file: File,
-    handleBlurChanges?: (value: number) => void
+    handleBlurChanges?: (value: number) => void,
+    sliderUpload?: (file: File, blur: number) => Promise<void>
 }
 
-export default function FileUploadedHandler({file, handleBlurChanges}: FileUploadedHandlerProps) {
+export default function FileUploadedHandler({file, handleBlurChanges, sliderUpload}: FileUploadedHandlerProps) {
 
     const [blur, setBlur] = useState(0);
+    const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
     const handleBlurChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newBlur = parseInt(event.target.value);
         setBlur(newBlur);
         if (handleBlurChanges) {
             handleBlurChanges(newBlur);
+            if (timeoutId.current) {
+                clearTimeout(timeoutId.current);
+            }
+            timeoutId.current = setTimeout(() => {
+                sliderUpload && sliderUpload(file, newBlur);
+            }, 300);
         }
     }
 

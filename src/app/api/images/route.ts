@@ -25,7 +25,6 @@ export const GET = async (request: NextRequest) => {
             console.error(`Failed to fetch data: ${res.status} ${res.statusText}`);
             return NextResponse.error();
         }
-        console.log(res);
         return res;
 
     } catch (error) {

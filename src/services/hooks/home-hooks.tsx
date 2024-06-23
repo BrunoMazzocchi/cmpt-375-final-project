@@ -5,6 +5,17 @@ export const useHomeHooks = () => {
     const [isUploaded, setIsUploaded] = useState(false);
     const [blurApplied, setBlurApplied] = useState(0);
 
+
+    const downloadFile = async (file: File) => {
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
     const handleFileChange = (file: File | null) => {
         setFile(file);
     };
@@ -93,5 +104,5 @@ export const useHomeHooks = () => {
         }
     };
 
-    return { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied };
+    return { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied, downloadFile};
 };
