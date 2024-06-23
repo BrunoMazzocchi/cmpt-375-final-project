@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 
 export const useHomeHooks = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -18,7 +18,7 @@ export const useHomeHooks = () => {
         return await response.json();
     };
 
-    const uploadFile = async (file: File, url: string, fields: any) => {
+    const uploadFile = async (file: File, url: string, fields: any): Promise<File> => {
         const formData = new FormData();
         formData.append("filepond", file);
         formData.append("url", url);
@@ -37,13 +37,12 @@ export const useHomeHooks = () => {
         const data = await response.json();
         const imageUrl = data['url'];
 
-        // Set file to the uploaded image URL
-        setFile(new File([file], imageUrl));
+        // Return file created with the imageUrl
+        return new File([file], imageUrl);
     };
 
     const uploadImageBlur = async (file: File, blur: number) => {
         const fileKey = file.name.split("/").pop();
-        console.log(blur.toString());
         const formData = new FormData();
         formData.append("key", fileKey as string);
         formData.append("blur_radius", blur.toString());
@@ -62,8 +61,20 @@ export const useHomeHooks = () => {
         const data = await response.json();
         const imageUrl = data['url'];
 
-        // Set file to the uploaded image URL
-        setFile(new File([file], imageUrl));
+        const imageBlob = await fetchImage(imageUrl);
+        const newFile = new File([imageBlob], fileKey!, {type: "image/jpeg"});
+        setFile(newFile);
+    }
+
+    const fetchImage = async (url: string): Promise<Blob> => {
+
+        const response = await fetch(`api/images/?url=${url}`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "image/jpeg"
+            },
+        });
+        return await response.blob();
     }
 
     const handleUpload = async () => {
@@ -71,8 +82,9 @@ export const useHomeHooks = () => {
             try {
                 const signedUrlData = await getSignedUrl();
                 console.log( signedUrlData['url']);
-                await uploadFile(file, signedUrlData['url'], signedUrlData['fields']);
-                setIsUploaded(true); // Set isUploaded to true when the upload button is clicked
+                const newFile = await uploadFile(file, signedUrlData['url'], signedUrlData['fields']);
+                setFile(newFile);
+                setIsUploaded(true);
             } catch (error) {
                 console.error(error);
             }

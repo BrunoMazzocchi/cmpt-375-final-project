@@ -27,9 +27,6 @@ export default function FileUploadedHandler({file, handleBlurChanges}: FileUploa
                 padding: '10px'
             }}>
                 <Image
-                    style={{
-                        filter: `blur(${blur}px)`,
-                    }}
                     src={url}
                     alt="Uploaded file"
                     width={500}
