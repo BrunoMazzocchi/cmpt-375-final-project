@@ -46,6 +46,7 @@ export default function FileUploadedHandler({
                     alt="Uploaded file"
                     width={500}
                     height={500}
+                    className="rounded-2xl"
                 />
             </div>
             <input
@@ -57,7 +58,7 @@ export default function FileUploadedHandler({
                 onChange={handleBlurChange}
             />
 
-            <p>Blur: {blur}px</p>
+            <p className="font-bold m-auto pb-8 text-white">Blur: {blur}px</p>
         </div>
     );
 }

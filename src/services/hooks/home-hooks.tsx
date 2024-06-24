@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 export const useHomeHooks = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -6,6 +6,7 @@ export const useHomeHooks = () => {
     const [blurApplied, setBlurApplied] = useState(0);
     const [isUploadingAnImage, setIsUploadingAnImage] = useState(false);
     const [isSliderChanging, setIsSliderChanging] = useState(false);
+    const [uploadedImageLoading, setUploadedImageLoading] = useState(false);
 
 
     const downloadFile = async (file: File) => {
@@ -60,6 +61,8 @@ export const useHomeHooks = () => {
         formData.append("key", fileKey as string);
         formData.append("blur_radius", blur.toString());
 
+        setUploadedImageLoading(true);
+
         const response = await fetch('/api/blur-image', {
             method: "POST",
             body: formData,
@@ -75,13 +78,15 @@ export const useHomeHooks = () => {
         const imageUrl = data['url'];
 
         const imageBlob = await fetchImage(imageUrl);
-        const newFile = new File([imageBlob], fileKey!, {type: "image/jpeg"});
+        const newFile = new File([imageBlob], fileKey!, { type: "image/jpeg" });
         setFile(newFile);
+
+        setUploadedImageLoading(false);
     }
 
     const fetchImage = async (url: string): Promise<Blob> => {
 
-        const response = await fetch(`api/images/?url=${url}`,{
+        const response = await fetch(`api/images/?url=${url}`, {
             method: "GET",
             headers: {
                 "Content-Type": "image/jpeg"
@@ -107,5 +112,19 @@ export const useHomeHooks = () => {
         }
     };
 
-    return { file, isUploaded, blurApplied, handleFileChange, handleUpload, uploadImageBlur, setBlurApplied, downloadFile, isUploadingAnImage, setIsUploadingAnImage, isSliderChanging, setIsSliderChanging};
+    return {
+        file,
+        isUploaded,
+        blurApplied,
+        handleFileChange,
+        handleUpload,
+        uploadImageBlur,
+        setBlurApplied,
+        downloadFile,
+        isUploadingAnImage,
+        setIsUploadingAnImage,
+        isSliderChanging,
+        setIsSliderChanging,
+        uploadedImageLoading,
+    };
 };

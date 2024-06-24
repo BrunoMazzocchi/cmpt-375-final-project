@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import {processEnv} from "@next/env";
 
 export const GET = async (request: NextRequest) => {
 
@@ -22,13 +21,11 @@ export const GET = async (request: NextRequest) => {
         });
 
         if (!res.ok) {
-            console.error(`Failed to fetch data: ${res.status} ${res.statusText}`);
             return NextResponse.error();
         }
         return res;
 
     } catch (error) {
-        console.error(`Failed to fetch data: ${error}`);
         return NextResponse.error();
     }
 }

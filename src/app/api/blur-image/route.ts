@@ -20,9 +20,7 @@ export const POST = async (request: NextRequest) => {
         });
 
         if (!res.ok) {
-            console.error(`Failed to upload data: ${res.status} ${res.statusText}`);
             const errorText = await res.text();
-            console.error(`Response body: ${errorText}`);
             return new NextResponse(JSON.stringify({ error: errorText }), { status: res.status });
         }
 
@@ -34,7 +32,6 @@ export const POST = async (request: NextRequest) => {
         });
 
     } catch (error) {
-        console.error(`Failed to fetch data: ${error}`);
         return new NextResponse(JSON.stringify({ error: error }), { status: 500 });
     }
 }

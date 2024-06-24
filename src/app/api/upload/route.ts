@@ -7,12 +7,10 @@ export const POST = async (request: NextRequest) => {
         const fields = JSON.parse(data.get('fields') as string);
 
         if (!file) {
-            console.error("No file selected.");
             return NextResponse.error();
         }
 
         if ((file as File).type !== "image/jpeg") {
-            console.error("Only JPG images are allowed.");
             return NextResponse.error();
         }
 
@@ -38,12 +36,9 @@ export const POST = async (request: NextRequest) => {
 
         if (!res.ok) {
             const errorText = await res.text();
-            console.error(`Failed to upload file: ${res.status} ${res.statusText}`);
-            console.error("Error details:", errorText);
             return NextResponse.error();
         }
 
-        console.log(`${process.env?.CLOUDFRONT_URL}/${fields.key}`);
 
         return NextResponse.json({
             message: true,
@@ -52,7 +47,6 @@ export const POST = async (request: NextRequest) => {
 
 
     } catch (error) {
-        console.error("An error occurred:", error);
         return NextResponse.error();
     }
 };
