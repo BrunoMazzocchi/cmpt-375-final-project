@@ -17,9 +17,6 @@ export default function Home() {
           <div className="mb-4">
             <FileUpload />
           </div>
-          <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl">
-            Upload
-          </button>
         </div>
       </div>
     </div>

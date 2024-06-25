@@ -1,35 +1,52 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
+import { NextRequest, NextResponse } from "next/server";
+export const POST = async (request: NextRequest) => {
+    try {
+        const data: FormData = await request.formData();
+        const file = data.get('filepond');
+        const urlToPost = data.get('url');
+        const fields = JSON.parse(data.get('fields') as string);
 
-export async function POST(req: NextRequest) {
-  const data: FormData = await req.formData();
-  const uploadedFiles = data.getAll('filepond');
+        if (!file) {
+            return NextResponse.error();
+        }
 
-  let fileName = '';
-  let parsedText = '';
+        if ((file as File).type !== "image/jpeg") {
+            return NextResponse.error();
+        }
 
-  if (uploadedFiles && uploadedFiles.length > 0) {
-    const uploadedFile = uploadedFiles[1];
-    console.log('Uploaded file:', uploadedFile);
+        const fileEntry = file as File;
 
-    if (uploadedFile instanceof File) {
-      fileName = uuidv4();
+        const formData = new FormData();
 
-      const tempFilePath = `/tmp/${fileName}.pdf`;
+        formData.append("key", fields['key']);
 
-      const fileBuffer = Buffer.from(await uploadedFile.arrayBuffer());
+        Object.entries(fields).forEach(([key, value]) => {
+            if (key !== "key") {
+                formData.append(key, value as string);
+            }
+        });
 
-      await fs.writeFile(tempFilePath, fileBuffer);
+        formData.append("file", fileEntry, fileEntry.name);
 
-    } else {
-      console.log('Uploaded file is not in the expected format.');
+        const res = await fetch(urlToPost as string, {
+            method: 'POST',
+            body: formData,
+            cache: 'no-cache',
+        });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            return NextResponse.error();
+        }
+
+
+        return NextResponse.json({
+            message: true,
+            url: `${process.env?.CLOUDFRONT_URL}/${fields.key}`
+        });
+
+
+    } catch (error) {
+        return NextResponse.error();
     }
-  } else {
-    console.log('No files found.');
-  }
-
-  const response = new NextResponse(parsedText);
-  response.headers.set('FileName', fileName);
-  return response;
-}
+};
