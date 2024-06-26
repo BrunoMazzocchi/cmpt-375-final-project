@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 
 interface FileUploadedHandlerProps {
     file: File,
@@ -35,7 +35,7 @@ export default function FileUploadedHandler({
         }
     }
 
-    const url = URL.createObjectURL(file);
+    const url = useMemo(() => URL.createObjectURL(file), [file]);
 
     return (
         <div>
