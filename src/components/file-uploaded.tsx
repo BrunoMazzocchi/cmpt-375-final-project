@@ -54,7 +54,9 @@ export default function FileUploadedHandler({
             </div>
 
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2" style={{
+                padding: "10px"
+            }}>
                 <Slider defaultValue={[0]} max={64} step={1}
                  className={`w-full`}
                   onValueChange={(value) => handleBlurChange({target: {value: value[0]}})}/>

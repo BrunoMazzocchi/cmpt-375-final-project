@@ -2,18 +2,18 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import FileUploader from "./file-uploaded";
-import {BlockList} from "node:net";
+import Spinner from  "./spinner";
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [updatedImage, setUpdatedImage] = useState<boolean | null>(null);
     const [blur, setBlur] = useState(0);
-    const [downloading , setDownloading] = useState<boolean | null>(null);
+    const [downloading, setDownloading] = useState<boolean | null>(null);
     const [uploading, setUploading] = useState<boolean | null>(null);
 
     const onDrop = useCallback(
-        (acceptedFiles: any) => {
+        async (acceptedFiles: any) => {
             const file = acceptedFiles[0] ?? null;
             setFile(file);
 
@@ -24,6 +24,8 @@ export default function FileUpload() {
             if (file) {
                 const url = URL.createObjectURL(file);
                 setPreviewUrl(url);
+                setUploading(true);
+                await handleUpload(file);
             } else {
                 setPreviewUrl(null);
             }
@@ -46,7 +48,7 @@ export default function FileUpload() {
         formData.append("url", url);
         formData.append("fields", JSON.stringify(fields));
 
-        const response = await fetch('/api/upload', {
+        const response = await fetch("/api/upload", {
             method: "POST",
             body: formData,
         });
@@ -57,32 +59,27 @@ export default function FileUpload() {
         }
 
         const data = await response.json();
-        const imageUrl = data['url'];
-
+        const imageUrl = data["url"];
 
         return new File([file], imageUrl);
     };
 
-    const handleUpload = async () => {
-        if (file) {
-            try {
-                setUploading(true);
-                const signedUrlData = await getSignedUrl();
-                const newFile = await upload(file, signedUrlData['url'], signedUrlData['fields']);
-                setFile(newFile);
-                setUpdatedImage(true);
-                setUploading(false);
-            } catch (error) {
-                console.error(error);
-            }
-        } else {
-            console.error("No file selected.");
+    const handleUpload = async (file: File) => {
+        try {
+            const signedUrlData = await getSignedUrl();
+            const newFile = await upload(file, signedUrlData["url"], signedUrlData["fields"]);
+            setFile(newFile);
+            setUpdatedImage(true);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setUploading(false);
         }
     };
 
     const downloadFile = async (file: File) => {
         const url = URL.createObjectURL(file);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = file.name;
         document.body.appendChild(a);
@@ -111,7 +108,7 @@ export default function FileUpload() {
         formData.append("key", fileKey as string);
         formData.append("blur_radius", blur.toString());
 
-        const response = await fetch('/api/blur', {
+        const response = await fetch("/api/blur", {
             method: "POST",
             body: formData,
         });
@@ -123,7 +120,7 @@ export default function FileUpload() {
         }
 
         const data = await response.json();
-        const imageUrl = data['url'];
+        const imageUrl = data["url"];
 
         const imageBlob = await fetchImage(imageUrl);
         const newFile = new File([imageBlob], fileKey!, { type: "image/jpeg" });
@@ -137,56 +134,39 @@ export default function FileUpload() {
         maxFiles: 1,
     });
 
-    return updatedImage && file ? (
+    return (
         <div className="flex flex-col gap-4">
-
-            <FileUploader file={file} handleBlurChanges={setBlur} />
-
-            <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={downloadBlurImage}>
-                {downloading ? "Downloading..." : "Download"}
-            </button>
-        </div>
-    ) : (
-        <div className="flex flex-col gap-4">
-            {previewUrl && file ? (
-                <div className="border-none relative m-auto max-w-full max-h-full rounded-3xl">
-                    <Image
-                        src={previewUrl}
-                        alt="Selected file"
-                        width={500}
-                        height={500}
-                        priority
-                        className="rounded-2xl"
-                    />
-                    <button
-                        className="flex absolute justify-center items-center w-6 h-6 top-2 right-2 bg-white text-black font-medium rounded-full p-2 hover:bg-gray-200 transition-colors duration-300 ease-in-out"
-                        onClick={() => {
-                            setFile(null);
-                            setPreviewUrl(null);
-                        }}
-                    >
-                        X
-                    </button>
+            {uploading && (
+                <div className="flex justify-center items-center h-64">
+                    <Spinner />
                 </div>
+            )}
+            {!uploading && updatedImage && file ? (
+                <>
+                    <FileUploader file={file} handleBlurChanges={setBlur} />
+                    <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={downloadBlurImage}>
+                        {downloading ? "Downloading..." : "Download"}
+                    </button>
+                </>
             ) : (
-                <div
-                    className={`text-center border border-dashed rounded-3xl p-20 hover:scale-105 transition-transform delay-100 duration-300 ease-in-out text-white ${
-                        isDragActive ? "scale-105 border-green-200 transition-colors" : ""
-                    }`}
-                    {...getRootProps()}
-                >
-                    <input {...getInputProps()} />
-                    {isDragActive ? (
-                        <p>Drop file here ...</p>
+                <div className="flex flex-col gap-4">
+                    {previewUrl && file ? (
+                        <div className="border-none relative m-auto max-w-full max-h-full rounded-3xl">
+                      
+                        </div>
                     ) : (
-                        <p>Drag and drop, or click to select a file</p>
+                        <div
+                            className={`text-center border border-dashed rounded-3xl p-20 hover:scale-105 transition-transform delay-100 duration-300 ease-in-out text-white ${
+                                isDragActive ? "scale-105 border-green-200 transition-colors" : ""
+                            }`}
+                            {...getRootProps()}
+                        >
+                            <input {...getInputProps()} />
+                            {isDragActive ? <p>Drop file here ...</p> : <p>Drag and drop, or click to select a file</p>}
+                        </div>
                     )}
                 </div>
             )}
-
-            <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={handleUpload}>
-                {uploading ? "Uploading image..." : "Upload"}
-            </button>
         </div>
     );
 }

@@ -8,8 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42a3e134-7764-4afb-b791-4ba002d899e1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/spinner.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/file-upload.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/file-upload.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/file-uploaded.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/file-uploaded.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -95,5 +97,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
