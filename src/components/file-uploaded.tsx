@@ -52,7 +52,14 @@ export default function FileUploadedHandler({
                 />
             </div>
             <input
-                style={{margin: '10px 0 20px 0'}}
+                style={{
+                    margin: '10px 0 20px 0',
+                    WebkitAppearance: 'none',
+                    backgroundColor: '#d3d3d3',
+                    opacity: '0.7',
+                    WebkitTransition: '.2s',
+                    transition: 'opacity .2s'
+                }}
                 type="range"
                 min="0"
                 max="64"
