@@ -9,6 +9,8 @@ export default function FileUpload() {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [updatedImage, setUpdatedImage] = useState<boolean | null>(null);
     const [blur, setBlur] = useState(0);
+    const [downloading , setDownloading] = useState<boolean | null>(null);
+    const [uploading, setUploading] = useState<boolean | null>(null);
 
     const onDrop = useCallback(
         (acceptedFiles: any) => {
@@ -64,10 +66,12 @@ export default function FileUpload() {
     const handleUpload = async () => {
         if (file) {
             try {
+                setUploading(true);
                 const signedUrlData = await getSignedUrl();
                 const newFile = await upload(file, signedUrlData['url'], signedUrlData['fields']);
                 setFile(newFile);
                 setUpdatedImage(true);
+                setUploading(false);
             } catch (error) {
                 console.error(error);
             }
@@ -101,7 +105,7 @@ export default function FileUpload() {
             console.error("No file selected.");
             return;
         }
-
+        setDownloading(true);
         const fileKey = file.name.split("/").pop();
         const formData = new FormData();
         formData.append("key", fileKey as string);
@@ -125,6 +129,7 @@ export default function FileUpload() {
         const newFile = new File([imageBlob], fileKey!, { type: "image/jpeg" });
 
         await downloadFile(newFile);
+        setDownloading(false);
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -134,9 +139,11 @@ export default function FileUpload() {
 
     return updatedImage && file ? (
         <div className="flex flex-col gap-4">
+
             <FileUploader file={file} handleBlurChanges={setBlur} />
+
             <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={downloadBlurImage}>
-                Download Image
+                {downloading ? "Downloading..." : "Download"}
             </button>
         </div>
     ) : (
@@ -178,7 +185,7 @@ export default function FileUpload() {
             )}
 
             <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={handleUpload}>
-                Upload
+                {uploading ? "Uploading image..." : "Upload"}
             </button>
         </div>
     );

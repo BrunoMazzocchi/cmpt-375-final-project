@@ -39,7 +39,7 @@ export default function FileUploadedHandler({
 
     return (
         <div>
-            <div className="backdrop-blur-md bg-white/30 rounded-2xl overflow-hidden">
+            <div className="backdrop-blur-md bg-white/20 rounded-2xl overflow-hidden">
                 <Image
                     src={url}
                     alt="Uploaded file"
@@ -47,7 +47,7 @@ export default function FileUploadedHandler({
                     height={500}
                     className="rounded-2xl"
                     style={{
-                        filter: `blur(${blur*3}px)`,
+                        filter: `blur(${blur * 3}px)`,
                     }}
                 />
             </div>
