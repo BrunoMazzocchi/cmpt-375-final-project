@@ -47,7 +47,7 @@ export default function FileUploadedHandler({
                     height={500}
                     className="rounded-2xl"
                     style={{
-                        filter: `blur(${blur * 3}px)`,
+                        filter: `blur(${blur}px)`,
                     }}
                 />
             </div>
