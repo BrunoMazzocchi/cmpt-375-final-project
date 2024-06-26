@@ -1,7 +1,8 @@
-import React, {useCallback, useState} from "react";
-import {useDropzone} from "react-dropzone";
+import React, { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import FileUploader from "./file-uploaded";
+import {BlockList} from "node:net";
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
@@ -37,7 +38,6 @@ export default function FileUpload() {
         return await response.json();
     };
 
-
     const upload = async (file: File, url: string, fields: any): Promise<File> => {
         const formData = new FormData();
         formData.append("filepond", file);
@@ -57,7 +57,7 @@ export default function FileUpload() {
         const data = await response.json();
         const imageUrl = data['url'];
 
-        // Return file created with the imageUrl
+
         return new File([file], imageUrl);
     };
 
@@ -67,7 +67,7 @@ export default function FileUpload() {
                 const signedUrlData = await getSignedUrl();
                 const newFile = await upload(file, signedUrlData['url'], signedUrlData['fields']);
                 setFile(newFile);
-                setUpdatedImage(true)
+                setUpdatedImage(true);
             } catch (error) {
                 console.error(error);
             }
@@ -84,21 +84,19 @@ export default function FileUpload() {
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
-    }
+    };
 
     const fetchImage = async (url: string): Promise<Blob> => {
-
         const response = await fetch(`api/images/?url=${url}`, {
             method: "GET",
             headers: {
-                "Content-Type": "image/jpeg"
+                "Content-Type": "image/jpeg",
             },
         });
         return await response.blob();
-    }
+    };
 
     const downloadBlurImage = async () => {
-
         if (!file) {
             console.error("No file selected.");
             return;
@@ -126,29 +124,25 @@ export default function FileUpload() {
         const imageBlob = await fetchImage(imageUrl);
         const newFile = new File([imageBlob], fileKey!, { type: "image/jpeg" });
 
-        downloadFile(newFile);
-    }
+        await downloadFile(newFile);
+    };
 
-
-
-
-
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         maxFiles: 1,
     });
 
-    return updatedImage && file ?
+    return updatedImage && file ? (
         <div className="flex flex-col gap-4">
             <FileUploader file={file} handleBlurChanges={setBlur} />
-            <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={downloadBlurImage}  >
+            <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={downloadBlurImage}>
                 Download Image
             </button>
         </div>
-        : (
-            <div className="flex flex-col gap-4">
-                {previewUrl && file ? (
-                    <div className="border-none relative m-auto max-w-full max-h-full rounded-3xl">
+    ) : (
+        <div className="flex flex-col gap-4">
+            {previewUrl && file ? (
+                <div className="border-none relative m-auto max-w-full max-h-full rounded-3xl">
                     <Image
                         src={previewUrl}
                         alt="Selected file"
@@ -182,7 +176,6 @@ export default function FileUpload() {
                     )}
                 </div>
             )}
-
 
             <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={handleUpload}>
                 Upload

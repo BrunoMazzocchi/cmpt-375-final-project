@@ -36,6 +36,7 @@ export const POST = async (request: NextRequest) => {
 
         if (!res.ok) {
             const errorText = await res.text();
+            console.log(res);
             return NextResponse.error();
         }
 

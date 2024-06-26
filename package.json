@@ -16,6 +16,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-filepond": "^7.1.2",
+    "sdx-resize-image": "^1.0.0",
     "stackblur-canvas": "^2.7.0",
     "uuid": "^9.0.1"
   },
