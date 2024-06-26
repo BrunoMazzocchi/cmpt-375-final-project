@@ -1,9 +1,6 @@
 import Image from "next/image";
 import React, {useRef, useState, useMemo} from "react";
-import {cn} from "@/lib/utils";
-import {className} from "postcss-selector-parser";
 import {Slider} from "@/components/ui/slider";
-import {SliderCustom} from "@/components/ui/slider-custom";
 
 interface FileUploadedHandlerProps {
     file: File,
@@ -58,7 +55,7 @@ export default function FileUploadedHandler({
 
 
             <div className="flex items-center gap-2">
-                <SliderCustom defaultValue={[0]} max={64} step={1}
+                <Slider defaultValue={[0]} max={64} step={1}
                  className={`w-full`}
                   onValueChange={(value) => handleBlurChange({target: {value: value[0]}})}/>
             <p className="font-bold text-white">{blur}px</p></div>

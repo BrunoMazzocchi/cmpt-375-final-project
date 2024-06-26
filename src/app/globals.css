@@ -1,13 +1,3 @@
 @tailwind base;
   @tailwind components;
   @tailwind utilities;
-
-.custom-slider .slider-thumb {
-  background-color: black !important; /* Black color for the thumb */
-  border: 2px solid white !important; /* White border for the thumb */
-}
-
-.custom-slider .slider-track {
-  /* Example: make the track white */
-  background-color: white;
-}
