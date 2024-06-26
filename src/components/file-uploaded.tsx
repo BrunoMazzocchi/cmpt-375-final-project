@@ -1,5 +1,8 @@
 import Image from "next/image";
 import React, { useRef, useState, useMemo } from "react";
+import {cn} from "@/lib/utils";
+import {className} from "postcss-selector-parser";
+import {Slider} from "@/components/ui/slider";
 
 interface FileUploadedHandlerProps {
     file: File,
@@ -18,9 +21,9 @@ export default function FileUploadedHandler({
     const [blur, setBlur] = useState(0);
     const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
-    const handleBlurChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleBlurChange = (event: { target: { value: number } }) => {
         console.log(event.target.value);
-        const newBlur = parseInt(event.target.value);
+        const newBlur = parseInt(String(event.target.value));
         setBlur(newBlur);
 
 
@@ -51,23 +54,18 @@ export default function FileUploadedHandler({
                     }}
                 />
             </div>
-            <input
-                style={{
-                    margin: '10px 0 20px 0',
-                    WebkitAppearance: 'none',
-                    backgroundColor: '#d3d3d3',
-                    opacity: '0.7',
-                    WebkitTransition: '.2s',
-                    transition: 'opacity .2s'
-                }}
-                type="range"
-                min="0"
-                max="64"
-                value={blur}
-                onChange={handleBlurChange}
-            />
 
-            <p className="font-bold m-auto pb-8 text-white">Blur: {blur}px</p>
+
+            <div className="flex items-center gap-2">
+                <Slider
+                    defaultValue={[0]}
+                    max={64}
+                    step={1}
+                    className={`w-[80%] bg-white rounded-full custom-slider ${className}`}
+                    onValueChange={(value) => handleBlurChange({ target: { value: value[0] } })}
+                />
+                <p className="font-bold text-white">{blur}px</p>
+            </div>
         </div>
     );
 }

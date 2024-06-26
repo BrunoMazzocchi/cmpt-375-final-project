@@ -170,7 +170,7 @@ export default function FileUpload() {
                 </div>
             ) : (
                 <div
-                    className={`text-center border border-dashed rounded-3xl p-20 hover:scale-105 transition-transform delay-100 duration-300 ease-in-out ${
+                    className={`text-center border border-dashed rounded-3xl p-20 hover:scale-105 transition-transform delay-100 duration-300 ease-in-out text-white ${
                         isDragActive ? "scale-105 border-green-200 transition-colors" : ""
                     }`}
                     {...getRootProps()}
