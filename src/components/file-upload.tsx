@@ -2,7 +2,8 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import FileUploader from "./file-uploaded";
-import Spinner from  "./spinner";
+import Spinner from "./spinner";
+import { motion } from "framer-motion";
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
@@ -142,17 +143,21 @@ export default function FileUpload() {
                 </div>
             )}
             {!uploading && updatedImage && file ? (
-                <>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <FileUploader file={file} handleBlurChanges={setBlur} />
                     <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={downloadBlurImage}>
                         {downloading ? "Downloading..." : "Download"}
                     </button>
-                </>
+                </motion.div>
             ) : (
                 <div className="flex flex-col gap-4">
                     {previewUrl && file ? (
                         <div className="border-none relative m-auto max-w-full max-h-full rounded-3xl">
-                      
+
                         </div>
                     ) : (
                         <div
