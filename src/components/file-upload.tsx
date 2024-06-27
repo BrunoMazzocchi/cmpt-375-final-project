@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import FileUploader from "./file-uploaded";
 import Spinner from "./spinner";
-import { motion } from "framer-motion";
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
@@ -12,6 +12,7 @@ export default function FileUpload() {
     const [blur, setBlur] = useState(0);
     const [downloading, setDownloading] = useState<boolean | null>(null);
     const [uploading, setUploading] = useState<boolean | null>(null);
+    const [invalidFileType, setInvalidFileType] = useState<boolean | null>(null);
 
     const onDrop = useCallback(
         async (acceptedFiles: any) => {
@@ -23,6 +24,15 @@ export default function FileUpload() {
             }
 
             if (file) {
+                if (file.type !== "image/jpeg" && file.type !== "image/jpg") {
+                    setInvalidFileType(true);
+                    setFile(null);
+                    setPreviewUrl(null);
+                    return;
+                } else {
+                    setInvalidFileType(false);
+                }
+
                 const url = URL.createObjectURL(file);
                 setPreviewUrl(url);
                 setUploading(true);
@@ -142,6 +152,11 @@ export default function FileUpload() {
                     <Spinner />
                 </div>
             )}
+            {invalidFileType && (
+                <div className="text-center text-red-500">
+                    Invalid file type. Please upload a JPEG image.
+                </div>
+            )}
             {!uploading && updatedImage && file ? (
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -157,7 +172,7 @@ export default function FileUpload() {
                 <div className="flex flex-col gap-4">
                     {previewUrl && file ? (
                         <div className="border-none relative m-auto max-w-full max-h-full rounded-3xl">
-
+                            <Image src={previewUrl} alt="preview" layout="fill" className="rounded-3xl object-cover" />
                         </div>
                     ) : (
                         <div
