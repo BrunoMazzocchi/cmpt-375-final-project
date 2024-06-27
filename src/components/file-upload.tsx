@@ -140,6 +140,14 @@ export default function FileUpload() {
         setDownloading(false);
     };
 
+    const retryUpload = () => {
+        setFile(null);
+        setPreviewUrl(null);
+        setUpdatedImage(null);
+        setUploading(null);
+        setInvalidFileType(null);
+    };
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         maxFiles: 1,
@@ -155,6 +163,9 @@ export default function FileUpload() {
             {invalidFileType && (
                 <div className="text-center text-red-500">
                     Invalid file type. Please upload a JPEG image.
+                    <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl mt-4" onClick={retryUpload}>
+                        Retry
+                    </button>
                 </div>
             )}
             {!uploading && updatedImage && file ? (
@@ -164,8 +175,11 @@ export default function FileUpload() {
                     transition={{ duration: 0.5 }}
                 >
                     <FileUploader file={file} handleBlurChanges={setBlur} />
-                    <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl" onClick={downloadBlurImage}>
+                    <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl mt-4" onClick={downloadBlurImage}>
                         {downloading ? "Downloading..." : "Download"}
+                    </button>
+                    <button className="w-full px-4 py-2 bg-white text-black font-bold rounded-3xl mt-4" onClick={retryUpload}>
+                        Retry
                     </button>
                 </motion.div>
             ) : (
